@@ -1,3 +1,6 @@
 [submodule "BabylonNative"]
 	path = BabylonNative
 	url = https://github.com/BabylonJS/BabylonNative.git
+[submodule "glfw"]
+	path = glfw
+	url = https://github.com/glfw/glfw.git

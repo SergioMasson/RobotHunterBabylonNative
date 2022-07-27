@@ -10,7 +10,6 @@ engine.runRenderLoop(function () {
     scene.render();
 });
 
-//-------------------- YOUR CODE GOES HERE ------------------------------
 scene.createDefaultCamera(true, true, true);
 var camera = scene.activeCamera;
 camera.setTarget(BABYLON.Vector3.Zero());
@@ -22,14 +21,16 @@ var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), 
 // Default intensity is 1. Let's dim the light a small amount
 light.intensity = 0.7;
 
-// Our built-in 'sphere' shape.
-var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-
-// Move the sphere upward 1/2 its height
-sphere.position.y = 1;
-
 // Our built-in 'ground' shape.
 var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
 
-
-
+BABYLON.SceneLoader.ImportMeshAsync(null, "app:///Models/", "littleRobot.glb", scene).then((mesh) => {
+    var robotMaterial = new BABYLON.StandardMaterial("robotMaterial", scene);
+    robotMaterial.diffuseTexture = new BABYLON.Texture("app:///Textures/character_basecolor.png", scene);
+    robotMaterial.emissiveTexture = new BABYLON.Texture("app:///Textures/character_emission.png", scene);
+    robotMaterial.linkEmissiveWithDiffuse = true;
+    robotMaterial.specularColor = new BABYLON.Color3(1, 1, 1);
+    robotMaterial.roughness = 1;
+    robotMaterial.specularPower = 20;
+    mesh.meshes[1].material = robotMaterial;
+});

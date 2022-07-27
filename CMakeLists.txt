@@ -1,8 +1,16 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(BabylonNativeSample VERSION 0.1.0)
+project(RobotHunterBJS VERSION 0.1.0)
 
 set(BABYLON_NATIVE_BUILD_APPS OFF)
 add_subdirectory(BabylonNative)
+
+set(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+set(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
+set(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)
+set(GLFW_BUILD_DOCS "Build the GLFW documentation" OFF)
+set(GLFW_INSTALL "Generate installation target" OFF)
+set(GLFW_LIBRARY_TYPE "STATIC")
+add_subdirectory(glfw)
 
 set(BABYLON_JS_SCRIPTS
     "Scripts/babylonjs.loaders.js"
@@ -19,9 +27,9 @@ set(BABYLON_JS_DEBUG
     "babylonjs.loaders.module.d.ts"
     "babylonjs.materials.module.d.ts")
 
-add_executable(BabylonNativeSample main.cpp ${BABYLON_JS_SCRIPTS})
+add_executable(RobotHunterBJS main.cpp ${BABYLON_JS_SCRIPTS})
 
-target_link_libraries(BabylonNativeSample 
+target_link_libraries(RobotHunterBJS 
     PRIVATE AppRuntime
     PRIVATE NativeEngine
     PRIVATE NativeInput
@@ -31,10 +39,11 @@ target_link_libraries(BabylonNativeSample
     PRIVATE ScriptLoader
     PRIVATE XMLHttpRequest
     PRIVATE Canvas
+    PRIVATE glfw
     ${ADDITIONAL_LIBRARIES}
     ${BABYLON_NATIVE_PLAYGROUND_EXTENSION_LIBRARIES})
 
-target_compile_features(BabylonNativeSample PRIVATE cxx_std_17)
+target_compile_features(RobotHunterBJS PRIVATE cxx_std_17)
 
 foreach(SCRIPT ${BABYLON_JS_SCRIPTS} ${BABYLON_JS_DEBUG})
     get_filename_component(SCRIPT_NAME "${SCRIPT}" NAME)
