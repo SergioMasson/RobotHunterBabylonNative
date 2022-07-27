@@ -21,13 +21,16 @@ set(BABYLON_JS_SCRIPTS
     "Scripts/meshwriter.min.js"
     "Scripts/ammo.js")
 
-set(BABYLON_JS_DEBUG
-    "babylon.gui.module.d.ts"
-    "babylon.module.d.ts"
-    "babylonjs.loaders.module.d.ts"
-    "babylonjs.materials.module.d.ts")
+set(GAME_MODELS
+    "Models/enemy.glb"
+    "Models/littleRobot.glb")
 
-add_executable(RobotHunterBJS main.cpp ${BABYLON_JS_SCRIPTS})
+set(GAME_TEXTURES
+    "Textures/character_basecolor.png"
+    "Textures/character_emission.png")
+
+
+add_executable(RobotHunterBJS main.cpp ${BABYLON_JS_SCRIPTS} ${GAME_MODELS} ${GAME_TEXTURES})
 
 target_link_libraries(RobotHunterBJS 
     PRIVATE AppRuntime
@@ -45,7 +48,7 @@ target_link_libraries(RobotHunterBJS
 
 target_compile_features(RobotHunterBJS PRIVATE cxx_std_17)
 
-foreach(SCRIPT ${BABYLON_JS_SCRIPTS} ${BABYLON_JS_DEBUG})
+foreach(SCRIPT ${BABYLON_JS_SCRIPTS})
     get_filename_component(SCRIPT_NAME "${SCRIPT}" NAME)
     add_custom_command(
         OUTPUT "${CMAKE_CFG_INTDIR}/Scripts/${SCRIPT_NAME}"
@@ -53,3 +56,25 @@ foreach(SCRIPT ${BABYLON_JS_SCRIPTS} ${BABYLON_JS_DEBUG})
         COMMENT "Copying ${SCRIPT_NAME}"
         MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPT}")
 endforeach()
+
+foreach(MODEL ${GAME_MODELS})
+    get_filename_component(MODEL_NAME "${MODEL}" NAME)
+    add_custom_command(
+        OUTPUT "${CMAKE_CFG_INTDIR}/Models/${MODEL_NAME}"
+        COMMAND "${CMAKE_COMMAND}" -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${MODEL}" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/Models/${MODEL_NAME}"
+        COMMENT "Copying ${MODEL_NAME}"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/${MODEL}")
+endforeach()
+
+foreach(TEXTURE ${GAME_TEXTURES})
+    get_filename_component(TEXTURE_NAME "${TEXTURE}" NAME)
+    add_custom_command(
+        OUTPUT "${CMAKE_CFG_INTDIR}/Textures/${TEXTURE_NAME}"
+        COMMAND "${CMAKE_COMMAND}" -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${TEXTURE}" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/Textures/${TEXTURE_NAME}"
+        COMMENT "Copying ${TEXTURE_NAME}"
+        MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/${TEXTURE}")
+endforeach()
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${BABYLON_JS_SCRIPTS})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${GAME_MODELS})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${GAME_TEXTURES})
